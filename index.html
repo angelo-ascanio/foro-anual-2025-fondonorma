@@ -9,16 +9,17 @@
     <h1>Foro Anual 2025 Fondonorma</h1>
     <ul id="dataList"></ul>
     <script>
-        fetch('./data/index.json')
+        fetch('./data/data.json')
             .then(response => response.json())
             .then(data => {
                 const dataList = document.getElementById('dataList');
                 data.forEach(item => {
                     const listItem = document.createElement('li');
-                    listItem.innerHTML = `<a href="./${item.id}">${item.Nombre} ${item.Apellido}</a>`;
+                    listItem.innerHTML = `<a href="./participant.html?id=${item.id}">${item.Nombre} ${item.Apellido}</a>`;
                     dataList.appendChild(listItem);
                 });
-            });
+            })
+            .catch(error => console.error('Error fetching data:', error));
     </script>
 </body>
 </html>

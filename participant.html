@@ -6,18 +6,23 @@
     <title>Participant Data</title>
 </head>
 <body>
-    <h1 id="participantName"></h1>
+    <h1 id="participantName">Participant Data</h1>
     <p id="participantEmpresa"></p>
     <script>
-        // Extract the participant ID from the URL
-        const participantId = window.location.pathname.split('/').pop();
+        // Get the participant ID from the URL query string
+        const urlParams = new URLSearchParams(window.location.search);
+        const participantId = urlParams.get('id');
 
-        // Correctly fetch the JSON file using the appropriate path
-        fetch(`./data/${participantId}.json`)
+        fetch('./data/data.json')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('participantName').innerText = `${data.Nombre} ${data.Apellido}`;
-                document.getElementById('participantEmpresa').innerText = `Empresa: ${data.Empresa}`;
+                const participant = data.find(item => item.id === participantId);
+                if (participant) {
+                    document.getElementById('participantName').innerText = `${participant.Nombre} ${participant.Apellido}`;
+                    document.getElementById('participantEmpresa').innerText = `Empresa: ${participant.Empresa}`;
+                } else {
+                    document.getElementById('participantName').innerText = 'Participant not found';
+                }
             })
             .catch(error => console.error('Error fetching data:', error));
     </script>
