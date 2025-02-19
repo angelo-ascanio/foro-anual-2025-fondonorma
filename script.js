@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
-    const id = window.location.pathname.split("/").pop();
+    const id = urlParams.get("id");
 
     fetch("data.json")
         .then(response => response.json())
