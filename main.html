@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistances</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        .container { border: 1px solid #ccc; padding: 20px; }
+        h1 { color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Assistances for C.I. <span id="c-i"></span></h1>
+        <p id="data"></p>
+    </div>
+    <script>
+        const c_i = window.location.pathname.split('/').pop();
+        document.getElementById('c-i').textContent = c_i;
+
+        fetch(`/data/${c_i}.json`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('data').textContent = JSON.stringify(data, null, 2);
+            });
+    </script>
+</body>
+</html>
