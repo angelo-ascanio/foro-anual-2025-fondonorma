@@ -12,12 +12,14 @@
         // Extract the participant ID from the URL
         const participantId = window.location.pathname.split('/').pop();
 
+        // Correctly fetch the JSON file using the appropriate path
         fetch(`./data/${participantId}.json`)
             .then(response => response.json())
             .then(data => {
                 document.getElementById('participantName').innerText = `${data.Nombre} ${data.Apellido}`;
                 document.getElementById('participantEmpresa').innerText = `Empresa: ${data.Empresa}`;
-            });
+            })
+            .catch(error => console.error('Error fetching data:', error));
     </script>
 </body>
 </html>
