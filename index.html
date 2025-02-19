@@ -3,41 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assistances</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
-        .container { border: 1px solid #ccc; padding: 20px; }
-        h1 { color: #333; }
-    </style>
+    <title>Foro Anual 2025 Fondonorma</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Assistances for C.I. <span id="c-i"></span></h1>
-        <p id="data"></p>
-    </div>
+    <h1>Foro Anual 2025 Fondonorma</h1>
+    <ul id="dataList"></ul>
     <script>
-        const pathSegments = window.location.pathname.split('/');
-        const c_i = pathSegments[pathSegments.length - 1] || 'default';
-        document.getElementById('c-i').textContent = c_i;
-
-        fetch(`/foro-anual-2025-fondonorma/data/${c_i}.json`)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    document.getElementById('data').textContent = 'No data found.';
-                    throw new Error('No data found.');
-                }
-            })
+        fetch('./data/index.json')
+            .then(response => response.json())
             .then(data => {
-                const formattedData = `
-                    <strong>Nombre:</strong> ${data.Nombre}<br>
-                    <strong>Apellido:</strong> ${data.Apellido}<br>
-                    <strong>Empresa:</strong> ${data.Empresa}
-                `;
-                document.getElementById('data').innerHTML = formattedData;
-            })
-            .catch(error => console.error('Error fetching data:', error));
+                const dataList = document.getElementById('dataList');
+                data.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<a href="./${item.id}">${item.Nombre} ${item.Apellido}</a>`;
+                    dataList.appendChild(listItem);
+                });
+            });
     </script>
 </body>
 </html>
