@@ -10,13 +10,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (user) {
                 infoDiv.innerHTML = `
-                    <p><strong>ID:</strong> ${user.ID}</p>
-                    <p><strong>Nombre:</strong> ${user.Nombre}</p>
-                    <p><strong>Apellido:</strong> ${user.Apellido}</p>
-                    <p><strong>Empresa:</strong> ${user.Empresa}</p>
+                    <div class="info-entry">
+                        <p><strong>ID:</strong> ${user.ID}</p>
+                        <p><strong>Nombre:</strong> ${user.Nombre}</p>
+                        <p><strong>Apellido:</strong> ${user.Apellido}</p>
+                        <p><strong>Empresa:</strong> ${user.Empresa}</p>
+                    </div>
                 `;
             } else {
-                infoDiv.innerHTML = "<p>ID not found.</p>";
+                infoDiv.innerHTML = '<p class="not-found">¡ID sin registro!</p>';
             }
         })
         .catch(error => console.error("Error fetching data:", error));
