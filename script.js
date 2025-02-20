@@ -2,24 +2,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const hash = urlParams.get("id");
 
-    // Fetch the encryption key from GitHub Secrets (set it in your environment)
-    const encryptionKey = process.env.ENCRYPTION_KEY;
+    const encryptionKey = "YOUR_BASE64_KEY"; // Use your actual base64 key here
 
     fetch("data.json")
-        .then(response => response.arrayBuffer())
+        .then(response => response.text())
         .then(encryptedData => {
-            // Convert encryption key from base64 to Uint8Array
-            const keyBytes = Uint8Array.from(atob(encryptionKey), c => c.charCodeAt(0));
-            
-            // Use SubtleCrypto to decrypt the data
-            return window.crypto.subtle.importKey("raw", keyBytes, { name: "AES-CBC" }, false, ["decrypt"])
-                .then(cryptoKey => {
-                    const iv = new Uint8Array(16);  // Ensure this matches your encryption setup in Python.
-                    return window.crypto.subtle.decrypt({ name: "AES-CBC", iv: iv }, cryptoKey, encryptedData);
-                });
-        })
-        .then(decryptedArrayBuffer => {
-            const decryptedText = new TextDecoder().decode(decryptedArrayBuffer);
+            // Decode the base64 key
+            const key = new fernet.Secret(encryptionKey);
+
+            // Decrypt the data using fernet.js
+            const token = new fernet.Token({
+                secret: key,
+                token: encryptedData,
+                ttl: 0 // Setting TTL to 0 to disable expiration
+            });
+
+            const decryptedText = token.decode();
             const data = JSON.parse(decryptedText);
             const user = data.find(item => item.hash === hash);
             const infoDiv = document.getElementById("info");
