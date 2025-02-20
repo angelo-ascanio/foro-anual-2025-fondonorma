@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get("id");
+    const hash = urlParams.get("id");
 
     fetch("data.json")
         .then(response => response.json())
         .then(data => {
-            const user = data.find(item => item.ID === id);
+            const user = data.find(item => item.hash === hash);
             const infoDiv = document.getElementById("info");
 
             if (user) {
