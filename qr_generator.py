@@ -44,6 +44,7 @@ if not os.path.exists(logo_path):
 
 boder_size = 20
 # Loop through the records and generate QR codes
+total_qr_codes = len(df)
 for index, row in df.iterrows():
     hash_value = row['hash']
     id_value = row['ID']
@@ -89,5 +90,8 @@ for index, row in df.iterrows():
     
     # Save the QR code image
     img.save(os.path.join(save_dir, f"{id_value}.png"))
+    
+    # Print progress
+    print(f"{index + 1}/{total_qr_codes} QR codes generated")
 
 print("QR codes generated successfully.")
