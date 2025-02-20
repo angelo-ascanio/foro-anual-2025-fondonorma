@@ -2,13 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const hash = urlParams.get("id");
 
-    // Retrieve the environment secret
-    const dataSecret = document.querySelector('meta[name="data-secret"]').getAttribute('content');
-
-    // Parse the JSON data from the environment secret
-    const data = JSON.parse(dataSecret);
-
-    const user = data.find(item => item.hash === hash);
+    const user = dataSecret.find(item => item.hash === hash);
     const infoDiv = document.getElementById("info");
 
     if (user) {
