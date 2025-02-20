@@ -64,13 +64,18 @@ for index, row in df.iterrows():
     
     # Open the logo image
     logo = Image.open(logo_path)
+    logo = logo.convert("RGBA")  # Ensure logo has alpha channel for transparency
     
     # Resize the logo while maintaining aspect ratio
     logo.thumbnail((img.size[0] // 4, img.size[1] // 4), Image.LANCZOS)
     logo_position = ((img.size[0] - logo.size[0]) // 2, (img.size[1] - logo.size[1]) // 2)
     
-    # Paste the logo onto the QR code
-    img.paste(logo, logo_position)
+    # Create a new image with the same size as img and paste the logo
+    transparent_layer = Image.new("RGBA", img.size, (255, 255, 255, 0))
+    transparent_layer.paste(logo, logo_position, logo)
+    
+    # Merge the QR code image with the transparent layer
+    img = Image.alpha_composite(img.convert("RGBA"), transparent_layer)
     
     # Add a message below the QR code
     message = f"@FONDONORMA"
@@ -89,7 +94,7 @@ for index, row in df.iterrows():
     draw.text(text_position, message, font=font, fill=(83, 83, 83))
     
     # Save the QR code image
-    img.save(os.path.join(save_dir, f"{id_value}.png"))
+    img.save(os.path.join(save_dir, f"{id_value}.png"), "PNG")
     
     # Print progress
     print(f"{index + 1}/{total_qr_codes} QR codes generated")
