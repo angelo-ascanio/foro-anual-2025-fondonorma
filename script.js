@@ -12,22 +12,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const keyBytes = Uint8Array.from(atob(encryptionKey), c => c.charCodeAt(0));
             
             // Use SubtleCrypto to decrypt the data
-            const cryptoKey = window.crypto.subtle.importKey(
-                "raw", 
-                keyBytes, 
-                "AES-CBC", 
-                false, 
-                ["decrypt"]
-            );
-
-            const iv = new Uint8Array(16);  // Assume that the IV is all zeros, you need to ensure this matches your encryption setup in Python.
-            const decryptedData = window.crypto.subtle.decrypt(
-                { name: "AES-CBC", iv: iv },
-                cryptoKey,
-                encryptedData
-            );
-
-            return decryptedData;
+            return window.crypto.subtle.importKey("raw", keyBytes, { name: "AES-CBC" }, false, ["decrypt"])
+                .then(cryptoKey => {
+                    const iv = new Uint8Array(16);  // Ensure this matches your encryption setup in Python.
+                    return window.crypto.subtle.decrypt({ name: "AES-CBC", iv: iv }, cryptoKey, encryptedData);
+                });
         })
         .then(decryptedArrayBuffer => {
             const decryptedText = new TextDecoder().decode(decryptedArrayBuffer);
