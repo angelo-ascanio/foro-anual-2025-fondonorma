@@ -13,6 +13,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Create public directory
+      run: mkdir -p public
+
     - name: Inject environment secret
       run: echo "const dataSecret = JSON.parse('${{ secrets.DATA }}');" > public/data.js
 
