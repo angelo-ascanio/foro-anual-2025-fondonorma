@@ -2,23 +2,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const hash = urlParams.get("id");
 
-    const encryptionKey = "YOUR_BASE64_KEY"; // Use your actual base64 key here
-
     fetch("data.json")
-        .then(response => response.text())
-        .then(encryptedData => {
-            // Decode the base64 key
-            const key = new fernet.Secret(encryptionKey);
-
-            // Decrypt the data using fernet.js
-            const token = new fernet.Token({
-                secret: key,
-                token: encryptedData,
-                ttl: 0 // Setting TTL to 0 to disable expiration
-            });
-
-            const decryptedText = token.decode();
-            const data = JSON.parse(decryptedText);
+        .then(response => response.json())
+        .then(data => {
             const user = data.find(item => item.hash === hash);
             const infoDiv = document.getElementById("info");
 
